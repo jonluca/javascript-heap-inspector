@@ -2343,10 +2343,8 @@ export abstract class HeapSnapshot {
     className: string,
     nodeFilter: HeapSnapshotModel.NodeFilter
   ): HeapSnapshotNodesProvider {
-    return new HeapSnapshotNodesProvider(
-      this,
-      this.aggregatesWithFilter(nodeFilter)[className].idxs
-    );
+    let aggregates = this.aggregatesWithFilter(nodeFilter);
+    return new HeapSnapshotNodesProvider(this, aggregates[className].idxs);
   }
 
   private maxJsNodeId(): number {
