@@ -1,0 +1,16 @@
+{
+  "name": "javascript-heap-inspector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/JavascriptHeapInspector.ts"
+  },
+  "devDependencies": {
+    "prettier": "^2.3.2"
+  },
+  "dependencies": {
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  }
+}
