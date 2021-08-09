@@ -600,14 +600,12 @@ export class HeapSnapshotProgress {
   }
 
   updateStatus(status: string): void {
-    this.sendUpdateEvent(JSON.stringify({ string: status, values: {} }));
+    this.sendUpdateEvent(status);
   }
 
   updateProgress(title: string, value: number, total: number): void {
     const percentValue = ((total ? value / total : 0) * 100).toFixed(0);
-    this.sendUpdateEvent(
-      JSON.stringify({ string: title, values: { PH1: percentValue } })
-    );
+    this.sendUpdateEvent(title);
   }
 
   reportProblem(error: string): void {
@@ -621,12 +619,14 @@ export class HeapSnapshotProgress {
   }
 
   private sendUpdateEvent(serializedText: string): void {
-    // May be undefined in tests.
+    // May be undefsendUpdateEventined in tests.
     if (this.dispatcher) {
       this.dispatcher.sendEvent(
         HeapSnapshotModel.HeapSnapshotProgressEvent.Update,
         serializedText
       );
+    } else {
+      console.log(serializedText);
     }
   }
 }
