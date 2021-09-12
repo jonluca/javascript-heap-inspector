@@ -28,6 +28,7 @@ class JavascriptHeapInspector {
     const fakeEdge = new Edge("", node, "", -1);
     const hsON = new HeapSnapshotObjectNode(this, snapshot, fakeEdge, null);
     await this._populateChildren();
+    await this.extractJsonStrings();
   };
 
   async _populateChildren(maybeNodeFilter?: NodeFilter): Promise<void> {
@@ -36,12 +37,36 @@ class JavascriptHeapInspector {
     if (this.snapshot) {
       const aggregates = await this.snapshot.aggregatesWithFilter(nodeFilter);
       this.aggregates = aggregates;
-      console.log(aggregates);
+      // console.log(aggregates);
+    }
+  }
+
+  async extractJsonStrings() {
+    if (!this.snapshot) {
+      throw new Error("Snapshot must be defined!");
+    }
+    const validJson = new Set();
+    this.snapshot.strings.forEach((s) => {
+      if (s.startsWith("{")) {
+        try {
+          const attemptedParse = JSON.parse(s);
+          validJson.add(attemptedParse);
+        } catch {
+          // do nothing, this was invalid JSON
+        }
+      }
+    });
+
+    if (validJson.size) {
+      console.log(`${validJson.size} valid JSON strings found`);
+      console.log(Array.from(validJson));
+    } else {
+      console.log("No valid JSON strings found");
     }
   }
 }
 const data = fs.readFileSync(
-  path.join(__dirname, "../sample.heapsnapshot"),
+  path.join(__dirname, "../heap.heapsnapshot"),
   "utf-8"
 );
 
