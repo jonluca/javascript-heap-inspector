@@ -47,7 +47,7 @@ class JavascriptHeapInspector {
     }
     const validJson = new Set();
     this.snapshot.strings.forEach((s) => {
-      if (s.startsWith("{")) {
+      if (s.startsWith("{") || s.startsWith("[")) {
         try {
           const attemptedParse = JSON.parse(s);
           validJson.add(attemptedParse);
